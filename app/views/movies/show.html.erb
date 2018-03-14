@@ -88,11 +88,14 @@
     <% else %>
       <% for review in Review.where(movie_id: movie.id).order("created_at desc") %>
         <p>
-          Star Rating: <%= review.rating %>
+          Star Rating:
+            <% review.rating.times do %>
+            &#9733;
+            <%end%>
         <p>
           <%= time_ago_in_words(review.updated_at) %> ago.
         <p>
-          <%= review.content%>
+          <%= review.content %>
         <hr>
       <%end%>
     <%end%>

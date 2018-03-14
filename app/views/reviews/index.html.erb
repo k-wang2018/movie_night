@@ -11,11 +11,10 @@
         <div class="card-body">
           <h5 class="card-title">
 
-            <% 3.times do %>
-              <p>Howdy!</p>
-            <% end %>
-
-            &#9733; &#9733; &#9733; &#9733; &#9733; &#9733;
+                Star Rating:
+                  <% review.rating.times do %>
+                  &#9733;
+                  <%end%>
             <p>
               <%#= review.updated_at.strftime("%B %d, %Y %l:%M %P") %>
               <%= time_ago_in_words(review.updated_at) %> ago.
