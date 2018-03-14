@@ -11,6 +11,18 @@
 
 </div>
 
+<p>
+<% review = Review.find_by(movie_id: movie.id) %>
+
+<!-- Displays Average Rating for Movie -->
+<strong>
+  <% if review != nil %>
+    &#9733; Average Rating:
+    <%= Review.where(movie_id: movie.id).average(:Rating).round(1) %> / 5
+  <% end %>
+</strong>
+<p>
+
 <div class="row">
 
   <div class="col-sm-3">
@@ -36,7 +48,7 @@
     </p>
 
     <div class="row mt-3">
-      <% characters_in_this_movie = Character.where(movie_id: movie.id) %>
+      <% characters_in_this_movie = Character.where(movie_id: movie) %>
       <% characters_in_this_movie.each do |character| %>
 
         <% the_actor = Actor.find_by(id: character.actor_id) %>
@@ -62,12 +74,60 @@
       Write a Review
     </a>
 
-    <h2>Reviews</h2>
+    <h2>Reviews for <%= movie.title %> </h2>
     <hr>
+    <% review = Review.find_by(movie_id: movie.id) %>
 
+    <!-- If there are no reviews -->
+    <% if review == nil %>
+      <p>
+      <center>Be the First to Write a Review!</center>
+      <p>
 
+    <!-- If there are existing reviews -->
+    <% else %>
+      <% for review in Review.where(movie_id: movie.id).order("created_at desc") %>
+        <p>
+          Star Rating: <%= review.rating %>
+        <p>
+          <%= time_ago_in_words(review.updated_at) %> ago.
+        <p>
+          <%= review.content%>
+        <hr>
+      <%end%>
+    <%end%>
 
+<!-- To Add a Review -->
 
+<hr>
+<center><strong>Add your own review!</strong></center>
+<p>
+
+  <%= form_tag "/reviews", class: 'col-sm-12' do %>
+
+    <input type="hidden" name="movie_id" value="<%= movie.id %>">
+
+    <p>Rating:
+        <select name="rating" class="form-control" required>
+          <option value="">Please Select...</option>
+          <option value="1">&#9733;</option>
+          <option value="2">&#9733; &#9733;</option>
+          <option value="3">&#9733; &#9733; &#9733; </option>
+          <option value="4">&#9733; &#9733; &#9733; &#9733; </option>
+          <option value="5">&#9733; &#9733; &#9733; &#9733; &#9733;</option>
+        </select>
+    </p>
+
+    <p>Your Review:
+      <textarea class="form-control" cols="40" rows="3" name="content">
+      </textarea>
+    </p>
+
+    <button class="btn btn-success">Submit Review</button>
+    or <%= link_to "Cancel", "/reviews" %>
+  <% end %>
+
+<p>
 
   </div>
 </div>

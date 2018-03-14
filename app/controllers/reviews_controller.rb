@@ -22,7 +22,7 @@ class ReviewsController < ApplicationController
     review.rating = params["rating"]
     review.content = params["content"]
     review.save
-    redirect_to "/reviews"
+    redirect_to "/movies/#{review.movie_id}"
   end
 
   def edit
